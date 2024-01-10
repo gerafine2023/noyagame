@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number Game</title>
+<style>
+body {
+    background-color: lightblue;
+    color: black;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="number"] {
+    padding: 10px;
+    width: 50px;
+}
+
+ @media (max-width: 600px) {
+        body {
+            font-size: 18px; /* Bigger text for small screens */
+        }
+
+        input[type="number"], button {
+            padding: 15px;
+            font-size: 16px; /* Make input box and button larger */
+        }
+
+        button {
+            width: 100%; /* Full width button */
+            margin-top: 10px; /* Add some space above the button */
+        }
+    }
+
+</style>
+
+
+</head>
+<body>
+    <h1>ברוכים הבאים למשחק הניחושים של נויה</h1>
+    <p>המטרה? לנחש את המספר הנכון בין 1-100:</p>
+    <input type="number" id="guess">
+    <button onclick="guessNumber()">נחש עכשיו!</button>
+    <p id="feedback"></p>
+
+<script>
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let guesses = 0;
+    let coldMessages = ["קצת קר. אפשר מספר גבוה יותר!", "בררר... גבוה יותר!", "קר כמו קרח. אולי משהו גבוה יותר?"];
+    let warmMessages = ["חמים, אבל צריך ללכת גבוה יותר!", "מתחמם. קצת יותר גבוה!", "חם. ייתכן שגבוה יותר זו הדרך!"];
+    let hotMessages = ["חם! ממש קרוב, אפשר לעלות קצת יותר!", "כמעט שורף! רק קצת יותר גבוה!", "סופר חם! אולי קצת יותר גבוה!"];
+
+    let coldMessagesLower = ["יותר מדי גבוה! כדאי לנסות מספר נמוך יותר.", "וואו, יותר נמוך! אתה בעננים!", "לאן עפת! כדאי לנסות עם ניחוש נמוך יותר."];
+    let warmMessagesLower = ["?חם, אבל בוא! נמוך יותר.", "אממ.. חם. נמוך זה טוב יותר!", "חמים ונעים! אולי ננסה ללכת נמוך יותר."];
+    let hotMessagesLower = ["מזה חם, אבל צריך נמוך יותר!", "כל כך חם, ועדיין נמוך זה המפתח!", "בוער, אבל נמוך יפגע במטרה!"];
+
+
+    function getRandomMessage(messages) {
+        return messages[Math.floor(Math.random() * messages.length)];
+    }
+
+    function getFeedback(userGuess) {
+        const distance = Math.abs(secretNumber - userGuess);
+        if (userGuess === secretNumber) {
+            return `מדהים! עשית את זה ב-${guesses} ניחושים.`;
+        } else if (userGuess > secretNumber) {
+            if (distance > 30) return getRandomMessage(coldMessagesLower);
+            if (distance > 10) return getRandomMessage(warmMessagesLower);
+            return getRandomMessage(hotMessagesLower);
+        } else {
+            if (distance > 30) return getRandomMessage(coldMessages);
+            if (distance > 10) return getRandomMessage(warmMessages);
+            return getRandomMessage(hotMessages);
+        }
+    }
+
+    document.querySelector('button').addEventListener('click', function() {
+        let userGuess = parseInt(document.getElementById('guess').value);
+        guesses += 1;
+
+        let feedbackText = getFeedback(userGuess);
+        document.getElementById('feedback').textContent = feedbackText;
+
+        if (userGuess === secretNumber) {
+            document.querySelector('button').disabled = true;
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>
